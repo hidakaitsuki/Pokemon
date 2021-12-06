@@ -1,11 +1,16 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+  <Header></Header>
+  <router-view />
 </template>
-
+<script>
+import { defineComponent } from "@vue/runtime-core";
+import Header from "../src/components/Header.vue"
+export default defineComponent({
+  components:{
+    Header
+  }
+})
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
