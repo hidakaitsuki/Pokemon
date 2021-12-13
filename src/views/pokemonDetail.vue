@@ -54,23 +54,59 @@
         <td>{{ currentPokemon.status.speed }}</td>
       </tr>
     </table>
-    <table>
+
+    <table class="skill">
       <tr>
-        <td colspan="2">
+        <td colspan="3">
           <h3>覚える技</h3>
         </td>
       </tr>
       <tr>
+        <th></th>
         <th>技名</th>
         <th>効果</th>
       </tr>
       <tr v-for="skill of currentPokemon.skill" v-bind:key="skill.skillName">
+        <td>
+          <label>
+            <input
+              type="checkbox"
+              v-bind:value="skill.skillName"
+              v-model="skills"
+            />
+            <span></span>
+          </label>
+        </td>
         <td>
           {{ skill.skillName }}
         </td>
         <td>{{ skill.skillUrl }}</td>
       </tr>
     </table>
+    <select
+      class="browser-default"
+      v-model.number="quantity"
+    >
+      <option value="" disabled selected>選択して下さい</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+    </select>
+    <span class="error"> {{ skillError }}</span
+    ><br />
+    <span class="error"> {{ quantityError }}</span
+    ><br />
+
+    <button type="button" @click="onClickAddCart()">カートに追加する</button>
   </div>
 </template>
 
@@ -82,30 +118,55 @@ import { Status } from "@/types/status";
 import { Type } from "@/types/type";
 import { defineComponent, ref } from "@vue/runtime-core";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default defineComponent({
   setup() {
     const route = useRoute();
     // ルーターからID取得
     const pokemonId = ref(parseInt(route.params.id));
+    // 名前
     const currentName = ref("");
+    // タイプ
     const currentTypes = ref([]);
+    // 特性
     const currentAbility = ref([]);
+    // 技
     const currentSkill = ref([]);
+    // ステータス
     const currentStatus = ref("");
+    // 現在のポケモンのクラス
     let currentPokemon = ref("");
+    // ポケモンの説明文
     let pokemonText = ref("");
+    // 選択した技
+    let skills = ref([]);
+    // スキルのエラー
+    let skillError = ref("");
+    // 数量;
+    let quantity = ref(0);
+    // 数量のエラー
+    let quantityError = ref("");
+    // エラーの保持の有無
+    let hasError = ref("");
+    const store = useStore();
+    const router = useRouter();
     // 今のIDからポケモンの情報を取得
     const getCurrentPokemon = async () => {
       const response = await axios.get(
         `https://pokeapi.co/api/v2/pokemon/${pokemonId.value}`
       );
+
       //   日本語の名前に変更
       const nameResponse = await axios.get(response.data.species.url);
       currentName.value = nameResponse.data.names.filter(
         (name) => name.language.name === "ja"
       )[0].name;
+      //   日本語の説明文を取得
+      pokemonText.value = nameResponse.data.flavor_text_entries.filter(
+        (text) => text.language.name === "ja"
+      )[0].flavor_text;
 
       //   タイプの配列
       for (let types of response.data.types) {
@@ -120,23 +181,24 @@ export default defineComponent({
           )
         );
       }
+
       //   特性の配列
-      for (let ability of response.data.abilities) {
-        const abilityResponse = await axios.get(ability.ability.url);
+      for (let abilities of response.data.abilities) {
+        const abilityResponse = await axios.get(abilities.ability.url);
         currentAbility.value.push(
           new Ability(
             //   日本語の特性に変更
             abilityResponse.data.names.filter(
               (ability) => ability.language.name === "ja-Hrkt"
             )[0].name,
-            ability.url
+            abilities.ability.url
           )
         );
       }
 
       //   技の配列
       for (let skill of response.data.moves) {
-        const response = await axios.get(skill.move.url);
+        const response =await axios.get(skill.move.url);
 
         currentSkill.value.push(
           new Skill(
@@ -170,22 +232,51 @@ export default defineComponent({
         currentStatus,
         response.data.sprites.front_default
       );
-      const responseText = await axios.get(response.data.species.url);
+    };
 
-      //   ポケモンの説明文を日本語に変更
-      pokemonText.value = responseText.data.flavor_text_entries.filter(
-        (text) => text.language.name === "ja"
-      )[0].flavor_text;
+    let onClickAddCart = () => {
+      skillError.value = "";
+      quantityError.value = "";
+      hasError.value = false;
+      if (skills.value.length === 0) {
+        skillError.value = "技を選択してください";
+        hasError.value = true;
+      } else if (skills.value.length > 4) {
+        skillError.value = "技は4つ以内で選択してください";
+        hasError.value = true;
+      }
+      if (quantity.value === 0) {
+        quantityError.value = "数量を選択してください";
+        hasError.value = true;
+      }
+      if (hasError.value === true) {
+        return;
+      }
+      store.commit("addPokemonCart", {
+        id: currentPokemon.value.id,
+        name: currentPokemon.value.name,
+        img: currentPokemon.value.img,
+        skill: skills,
+        quantity: quantity.value,
+      });
+      router.push("/cartList");
     };
     getCurrentPokemon();
-    return { currentPokemon, pokemonText };
+    return {
+      currentPokemon,
+      pokemonText,
+      onClickAddCart,
+      skills,
+      quantity,
+      skillError,
+      quantityError,
+    };
   },
 });
 </script>
 
 <style scoped>
 .container {
-  padding-top: 100px;
   text-align: center;
 }
 img {
@@ -194,10 +285,19 @@ img {
   margin-bottom: -50px;
 }
 .status {
-  float: left;
+  float: right;
   width: 200px;
+  margin-top: -500px;
+  margin-left: 100px;
 }
 .detail {
   width: 500px;
+}
+.error {
+  color: red;
+}
+.detail {
+  align-content: center;
+  margin-left: 300px;
 }
 </style>

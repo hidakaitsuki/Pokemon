@@ -1,19 +1,26 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
- 
-  // 存在しないパスに遷移すると404ページへ
   {
     path: "/",
     component: () => import("../views/pokemonList.vue"),
   },
   {
-    path:"/pokemonDetail/:id",
+    path: "/pokemonDetail/:id",
     component: () => import("../views/pokemonDetail.vue"),
   },
   {
+    // 存在しないパスに遷移すると404ページへ
     path: "/:NotFound(.*)",
     component: () => import("../views/page404.vue"),
+  },
+  {
+    path: "/cartList",
+    component: () => import("../views/cartList.vue"),
+  },
+  {
+    path: "/login",
+    component: () => import("../views/login.vue"),
   },
 ];
 

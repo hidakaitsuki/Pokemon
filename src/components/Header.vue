@@ -2,17 +2,18 @@
   <header>
     <div class="container">
       <div class="header">
+        <img src="/67872373.png" class="logo" />
         <div class="header-left"></div>
         <div class="header-right">
           <router-link to="/">TOP</router-link>
-          <router-link to="/registerUser" v-if="!isLogin">会員登録</router-link>
+          <router-link to="/registerUser">会員登録</router-link>
           <router-link to="/cartList">
             <i class="fas fa-shopping-cart"> </i>カート
           </router-link>
-          <router-link to="/login" v-if="!isLogin">
+          <router-link to="/login">
             <i class="fas fa-sign-in-alt"></i>ログイン
           </router-link>
-          <router-link to="/logout" v-if="isLogin">
+          <router-link to="/logout">
             <i class="fas fa-sign-in-alt"></i>ログアウト
           </router-link>
         </div>
@@ -41,10 +42,14 @@ header {
   justify-content: space-between;
   align-items: center;
 }
-
+header {
+  width: 100%;
+  background-color: turquoise;
+}
 .logo {
-  width: 230px;
+  width: 165px;
   margin-top: 0;
+  padding-left: 0%;
 }
 
 .header-right {
@@ -84,4 +89,5 @@ header {
   font-size: 25px;
   padding: 21px 0;
 }
+
 </style>

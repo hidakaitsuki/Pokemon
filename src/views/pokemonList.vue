@@ -1,11 +1,32 @@
 <template>
   <div class="body">
-    <div v-for="page of pageArray" v-bind:key="page">
-      <button type="button" class="button">{{ page }}</button>
+    <input type="text" v-model="searchName" class="namesearch" />
+    <button type="button" @click="searchByName()" class="btn-gradient-radius">
+      名前で検索
+    </button>
+    <div class="search">
+      <button
+        type="button"
+        class="btn-gradient-3d-simple"
+        v-on:click="onPageButtunClick(page)"
+        v-for="page of pageArray"
+        v-bind:key="page"
+      >
+        {{ page }}
+      </button>
+      <br />
+      <button
+        type="button"
+        v-for="type of typeArray"
+        v-bind:key="type"
+        @click="searchType(type)"
+        class="btn-top-radius"
+      >
+        {{ type }}</button
+      ><br />
     </div>
-    <br /><br />
     <div v-for="pokemon of pokemonList" v-bind:key="pokemon.id" class="pokemon">
-      <table>
+      <table class="list">
         <tr>
           <td colspan="2" class="imgtd">
             <router-link v-bind:to="'/pokemonDetail/' + pokemon.id">
@@ -14,11 +35,6 @@
           </td>
         </tr>
         <tr>
-          <th>ID：</th>
-          <td>{{ pokemon.id }}</td>
-        </tr>
-        <tr>
-          <th>名前：</th>
           <td>{{ pokemon.name }}</td>
         </tr>
       </table>
@@ -29,21 +45,72 @@
 <script lang="ts">
 import { Pokemon } from "@/types/pokemon";
 import { defineComponent, ref } from "@vue/runtime-core";
+import axios from "axios";
 import { useStore } from "vuex";
 
 export default defineComponent({
   setup() {
+    let typeArray = [
+      "ノーマル",
+      "ほのお",
+      "みず",
+      "でんき",
+      "くさ",
+      "こおり",
+      "かくとう",
+      "どく",
+      "じめん",
+      "ひこう",
+      "エスパー",
+      "むし",
+      "いわ",
+      "ゴースト",
+      "ドラゴン",
+      "あく",
+      "はがね",
+      "フェアリー",
+    ];
     let pokemonList = ref(new Array<Pokemon>());
     let totalPokemonCount = ref(0);
     let pageArray = ref(new Array<number>());
-    // let displayPokemons = ref(new Array<Pokemon>());
+    let displayPokemons = ref(new Array<Pokemon>());
+    let searchName = ref("");
     const store = useStore();
-    // ポケモン情報取得
+    // 初期のポケモン情報取得
     let getPokemon = async () => {
-      await store.dispatch("getPokemonList");
+      store.commit("resetPokemons");
+      store.dispatch("getPokemonList");
       pokemonList.value = store.getters.getPokemons;
+
+      const response = await axios.post(
+        "https://create-api-rks.herokuapp.com/samples",
+       "aaa" 
+      );
+      console.log(response.data);
     };
+    // let sortPokemon = () => {
+    //   pokemonList.value = pokemonList.value.sort(function (a, b) {
+    //     return a.id < b.id ? 1 : -1;
+    //   });
+    // };
+
+    // 名前で検索したポケモンのみ検索する
+    let searchByName = () => {
+      pokemonList.value = store.getters.getPokemons;
+      pokemonList.value = pokemonList.value.filter(
+        (pokemon) => pokemon.name.includes(searchName.value) === true
+      );
+      if (pokemonList.value.length === 0) {
+        pokemonList.value = store.getters.getPokemons;
+      }
+    };
+
+    for (let i = 1; i <= 100; i++) {
+      displayPokemons.value.push(pokemonList.value[i]);
+      pokemonList.value = displayPokemons.value;
+    }
     getPokemon();
+
     // 合計のポケモン取得
     totalPokemonCount.value = store.getters.getTotalCount;
 
@@ -55,20 +122,35 @@ export default defineComponent({
     for (let i = 1; i <= maxpagenumber; i++) {
       pageArray.value.push(i);
     }
-    // // 初期のポケモン一覧
-    // for (let i = 1; i <= 100; i++) {
-    //   displayPokemons.value.push(pokemonList.value[i]);
-    // }
-    // pokemonList.value = displayPokemons.value;
 
-    // // let onPageButtunClick = (page: number) => {
-    // //   pokemonList.value = store.getters.getpokemons.slice(
-    // //     page * 100 - 100,
-    // //     page * 100
-    // //   );
-    // // };
-
-    return { pokemonList, totalPokemonCount, pageArray };
+    // ページング処理
+    let onPageButtunClick = (page: number) => {
+      pokemonList.value = store.getters.getPokemons;
+      const slicePokemon = pokemonList.value.slice(
+        page * 100 - 100,
+        page * 100
+      );
+      pokemonList.value = slicePokemon;
+    };
+    let searchType = (searchType: string) => {
+      // ストアのポケモンを呼びしてリセット
+      pokemonList.value = store.getters.getPokemons;
+      //  引数で受け取ったタイプで絞り込む
+      const searchPokemon = pokemonList.value.filter(
+        (pokemon) => pokemon.type.includes(searchType) === true
+      );
+      pokemonList.value = searchPokemon;
+    };
+    return {
+      pokemonList,
+      totalPokemonCount,
+      pageArray,
+      searchType,
+      typeArray,
+      onPageButtunClick,
+      searchByName,
+      searchName,
+    };
   },
 });
 </script>
@@ -76,9 +158,10 @@ export default defineComponent({
 <style scoped>
 td,
 th {
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  border: solid;
-  width: 150px;
+  font-family: monospace;
+  font-size: 20px;
+  border: ridge;
+  width: 100px;
   text-align: center;
 }
 .pokemon {
@@ -92,13 +175,67 @@ th {
   text-align: center;
 }
 .img {
-  width: 200px;
+  width: 150px;
 }
 .button {
   float: left;
   text-align: center;
 }
-.body {
-  padding-top: 100px;
+
+table {
+  margin-left: 50px;
+  margin-right: auto;
+
+  background-image: url(../../public/1867768.jpg);
+}
+.btn-top-radius {
+  position: relative;
+  display: inline-block;
+  font-weight: bold;
+  padding: 8px 10px 5px 10px;
+  text-decoration: none;
+  color: #ffa000;
+  background: #fff1da;
+  border-bottom: solid 4px #ffa000;
+  border-radius: 15px 15px 0 0;
+  transition: 0.4s;
+  width: auto;
+}
+
+.btn-top-radius:hover {
+  background: #ffc25c;
+  color: #fff;
+}
+.btn-gradient-3d-simple {
+  display: inline-block;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  border-radius: 4px;
+  color: #ffffff;
+  background-image: linear-gradient(#6795fd 0%, #67ceff 100%);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+  border-bottom: solid 3px #5e7fca;
+}
+
+.btn-gradient-3d-simple:active {
+  -webkit-transform: translateY(4px);
+  transform: translateY(4px);
+  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);
+  border-bottom: none;
+}
+
+.btn-gradient-radius {
+  font-family: monospace;
+  display: inline-block;
+  padding: 7px 20px;
+  border-radius: 25px;
+  text-decoration: none;
+  color: #fff;
+  background-image: linear-gradient(45deg, #ffc107 0%, #ff8b5f 100%);
+  transition: 0.4s;
+}
+
+.btn-gradient-radius:hover {
+  background-image: linear-gradient(45deg, #ffc107 0%, #f76a35 100%);
 }
 </style>
