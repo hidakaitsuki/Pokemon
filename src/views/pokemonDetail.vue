@@ -58,35 +58,32 @@
     <table class="skill">
       <tr>
         <td colspan="3">
-          <h3>覚える技</h3>
+          <h3>持ち物</h3>
         </td>
       </tr>
       <tr>
         <th></th>
-        <th>技名</th>
+        <th>名前</th>
         <th>効果</th>
       </tr>
-      <tr v-for="skill of currentPokemon.skill" v-bind:key="skill.skillName">
+      <tr v-for="item of items" v-bind:key="item.name">
         <td>
           <label>
             <input
               type="checkbox"
-              v-bind:value="skill.skillName"
-              v-model="skills"
+              v-bind:value="item.name"
+              v-model="items"
             />
             <span></span>
           </label>
         </td>
         <td>
-          {{ skill.skillName }}
+          {{ item.name }}
         </td>
-        <td>{{ skill.skillUrl }}</td>
+        <td>{{ item.effect }}</td>
       </tr>
     </table>
-    <select
-      class="browser-default"
-      v-model.number="quantity"
-    >
+    <select class="browser-default" v-model.number="quantity">
       <option value="" disabled selected>選択して下さい</option>
       <option value="1">1</option>
       <option value="2">2</option>
@@ -114,6 +111,7 @@
 import { Ability } from "@/types/ability";
 import { PokemonDetail } from "@/types/pokemonDetail";
 import { Skill } from "@/types/skill";
+import { Item } from "@/types/item";
 import { Status } from "@/types/status";
 import { Type } from "@/types/type";
 import { defineComponent, ref } from "@vue/runtime-core";
@@ -140,10 +138,11 @@ export default defineComponent({
     let currentPokemon = ref("");
     // ポケモンの説明文
     let pokemonText = ref("");
-    // 選択した技
-    let skills = ref([]);
+    // 選択したアイテム
+    let item = ref([]);
     // スキルのエラー
     let skillError = ref("");
+    let items = ref([]);
     // 数量;
     let quantity = ref(0);
     // 数量のエラー
@@ -196,23 +195,20 @@ export default defineComponent({
         );
       }
 
-      //   技の配列
-      for (let skill of response.data.moves) {
-        const response =await axios.get(skill.move.url);
-
-        currentSkill.value.push(
-          new Skill(
-            //   日本語の技名に変更
-            response.data.names.filter(
-              (skill) => skill.language.name === "ja"
-            )[0].name,
-            // 日本語の技の説明に変更
-            response.data.flavor_text_entries.filter(
-              (text) => text.language.name === "ja"
-            )[0].flavor_text
-          )
+      // 自作APIからアイテムの名前と効果をとってくる
+      let getItems = async () => {
+        const response = await axios.get(
+          "https://create-api-rks.herokuapp.com/samples/pokemon"
         );
-      }
+
+        for (let item of response.data.items) {
+          items.value.push(new Item(item.name, item.effect));
+        }
+        console.log(items.value);
+      };
+
+      getItems();
+      // console.log(items.value);
       //  ステータス
       currentStatus.value = new Status(
         response.data.stats[0].base_stat,
@@ -238,13 +234,13 @@ export default defineComponent({
       skillError.value = "";
       quantityError.value = "";
       hasError.value = false;
-      if (skills.value.length === 0) {
-        skillError.value = "技を選択してください";
-        hasError.value = true;
-      } else if (skills.value.length > 4) {
-        skillError.value = "技は4つ以内で選択してください";
-        hasError.value = true;
-      }
+      // if (skills.value.length === 0) {
+      //   skillError.value = "技を選択してください";
+      //   hasError.value = true;
+      // } else if (skills.value.length > 4) {
+      //   skillError.value = "技は4つ以内で選択してください";
+      //   hasError.value = true;
+      // }
       if (quantity.value === 0) {
         quantityError.value = "数量を選択してください";
         hasError.value = true;
@@ -256,7 +252,7 @@ export default defineComponent({
         id: currentPokemon.value.id,
         name: currentPokemon.value.name,
         img: currentPokemon.value.img,
-        skill: skills,
+        item: items.value,
         quantity: quantity.value,
       });
       router.push("/cartList");
@@ -266,10 +262,12 @@ export default defineComponent({
       currentPokemon,
       pokemonText,
       onClickAddCart,
-      skills,
+
       quantity,
       skillError,
       quantityError,
+      items,
+      item,
     };
   },
 });

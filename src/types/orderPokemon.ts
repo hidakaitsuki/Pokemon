@@ -3,7 +3,7 @@ export class OrderPokemon {
     private _id: number,
     private _name: string,
     private _img: string,
-    private _skill: Array<string>,
+    private _item: Array<string>,
     private _quantity: number
   ) {}
 
@@ -31,12 +31,12 @@ export class OrderPokemon {
     this._img = img;
   }
 
-  public get skill(): Array<string> {
-    return this._skill;
+  public get item(): Array<string> {
+    return this._item;
   }
 
-  public set skill(skill: Array<string>) {
-    this._skill = skill;
+  public set item(item: Array<string>) {
+    this._item = item;
   }
 
   public get quantity(): number {

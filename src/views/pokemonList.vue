@@ -73,7 +73,7 @@ export default defineComponent({
     let pokemonList = ref(new Array<Pokemon>());
     let totalPokemonCount = ref(0);
     let pageArray = ref(new Array<number>());
-    let displayPokemons = ref(new Array<Pokemon>());
+
     let searchName = ref("");
     const store = useStore();
     // 初期のポケモン情報取得
@@ -81,10 +81,12 @@ export default defineComponent({
       store.commit("resetPokemons");
       store.dispatch("getPokemonList");
       pokemonList.value = store.getters.getPokemons;
-
+      pokemonList.value.sort(function (a, b) {
+        return a.id > b.id ? -1 : 1;
+      });
       const response = await axios.post(
         "https://create-api-rks.herokuapp.com/samples",
-       "aaa" 
+        "aaa"
       );
       console.log(response.data);
     };
@@ -100,19 +102,18 @@ export default defineComponent({
       pokemonList.value = pokemonList.value.filter(
         (pokemon) => pokemon.name.includes(searchName.value) === true
       );
+      // 存在しなければ全件表示
       if (pokemonList.value.length === 0) {
         pokemonList.value = store.getters.getPokemons;
       }
     };
-
-    for (let i = 1; i <= 100; i++) {
-      displayPokemons.value.push(pokemonList.value[i]);
-      pokemonList.value = displayPokemons.value;
-    }
     getPokemon();
 
+    store.commit("sortById");
+
     // 合計のポケモン取得
-    totalPokemonCount.value = store.getters.getTotalCount;
+    totalPokemonCount.value = 898;
+    console.log(totalPokemonCount.value + "aaa");
 
     // ページ数でボタン表示
     let maxpagenumber = Math.floor(totalPokemonCount.value / 100 + 1);
@@ -132,6 +133,16 @@ export default defineComponent({
       );
       pokemonList.value = slicePokemon;
     };
+    // 2秒後に最初の100件のポケモンを表示する(読み込みに時間がかかるため)
+    let firstpokemon = () => {
+      const firstPokemon = pokemonList.value.slice(0, 100);
+      pokemonList.value = firstPokemon;
+    };
+    let settime = () => {
+      setTimeout(firstpokemon, 1500);
+    };
+    settime();
+
     let searchType = (searchType: string) => {
       // ストアのポケモンを呼びしてリセット
       pokemonList.value = store.getters.getPokemons;

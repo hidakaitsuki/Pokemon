@@ -35,7 +35,7 @@ export default createStore({
           payload.id,
           payload.name,
           payload.img,
-          payload.skill,
+          payload.item,
           payload.quantity
         )
       );

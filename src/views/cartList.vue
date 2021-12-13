@@ -7,14 +7,14 @@
       >
       <tr>
         <th>名前</th>
-        <th>覚える技</th>
+        <th>持ち物</th>
         <th>数量</th>
       </tr>
         <tr>
           <th><img :src="cartPokemon.img" /><br />{{ cartPokemon.name }}</th>
           <th>
-            <ul v-for="skill of cartPokemon.skill" v-bind:key="skill.name">
-              <li>{{ skill }}</li>
+            <ul v-for="item of cartPokemon.item" v-bind:key="item.name">
+              <li>{{ item }}</li>
             </ul>
           </th>
           <th>{{ cartPokemon.quantity }}</th>
