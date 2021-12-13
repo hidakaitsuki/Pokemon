@@ -66,21 +66,21 @@
         <th>名前</th>
         <th>効果</th>
       </tr>
-      <tr v-for="item of items" v-bind:key="item.name">
+      <tr v-for="currentitem of items" v-bind:key="currentitem.name">
         <td>
           <label>
             <input
               type="checkbox"
-              v-bind:value="item.name"
-              v-model="items"
+              v-bind:value="currentitem.name"
+              v-model="item"
             />
             <span></span>
           </label>
         </td>
         <td>
-          {{ item.name }}
+          {{ currentitem.name }}
         </td>
-        <td>{{ item.effect }}</td>
+        <td>{{ currentitem.effect }}</td>
       </tr>
     </table>
     <select class="browser-default" v-model.number="quantity">
@@ -110,7 +110,6 @@
 <script>
 import { Ability } from "@/types/ability";
 import { PokemonDetail } from "@/types/pokemonDetail";
-import { Skill } from "@/types/skill";
 import { Item } from "@/types/item";
 import { Status } from "@/types/status";
 import { Type } from "@/types/type";
@@ -142,6 +141,7 @@ export default defineComponent({
     let item = ref([]);
     // スキルのエラー
     let skillError = ref("");
+    // 全てのアイテムの配列
     let items = ref([]);
     // 数量;
     let quantity = ref(0);
@@ -252,7 +252,7 @@ export default defineComponent({
         id: currentPokemon.value.id,
         name: currentPokemon.value.name,
         img: currentPokemon.value.img,
-        item: items.value,
+        item: item.value,
         quantity: quantity.value,
       });
       router.push("/cartList");
