@@ -113,8 +113,6 @@ export default defineComponent({
 
     // 合計のポケモン取得
     totalPokemonCount.value = 898;
-    console.log(totalPokemonCount.value + "aaa");
-
     // ページ数でボタン表示
     let maxpagenumber = Math.floor(totalPokemonCount.value / 100 + 1);
     if (totalPokemonCount.value % 100 === 0) {

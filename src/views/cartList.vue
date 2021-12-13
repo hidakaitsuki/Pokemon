@@ -41,7 +41,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c");
+
 .container {
+  font-family: "M PLUS Rounded 1c", sans-serif;
   padding-top: 100px;
 }
 th,
@@ -52,8 +55,5 @@ td {
 }
 img {
   height: 150px;
-}
-.container {
-  font-size: 15px;
 }
 </style>
