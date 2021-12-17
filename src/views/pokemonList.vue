@@ -12,7 +12,7 @@
         v-for="page of pageArray"
         v-bind:key="page"
       >
-        {{ page }}
+        第 {{ page }}世代
       </button>
       <br />
       <button
@@ -29,6 +29,8 @@
       <table class="list">
         <tr>
           <td colspan="2" class="imgtd">
+            <span class="number"> No.{{ pokemon.id }}</span
+            ><br />
             <router-link v-bind:to="'/pokemonDetail/' + pokemon.id">
               <img :src="pokemon.img" class="img" />
             </router-link>
@@ -84,17 +86,17 @@ export default defineComponent({
       pokemonList.value.sort(function (a, b) {
         return a.id > b.id ? -1 : 1;
       });
-      const response = await axios.post(
-        "https://create-api-rks.herokuapp.com/samples",
-        "aaa"
-      );
-      console.log(response.data);
+ 
     };
     // let sortPokemon = () => {
     //   pokemonList.value = pokemonList.value.sort(function (a, b) {
     //     return a.id < b.id ? 1 : -1;
     //   });
     // };
+    const sortPokemon = pokemonList.value.sort(function (a, b) {
+      return a.id < b.id ? -1 : 1;
+    });
+    pokemonList.value = sortPokemon;
 
     // 名前で検索したポケモンのみ検索する
     let searchByName = () => {
@@ -109,35 +111,61 @@ export default defineComponent({
     };
     getPokemon();
 
-    store.commit("sortById");
-
     // 合計のポケモン取得
     totalPokemonCount.value = 898;
+    pageArray.value = [1, 2, 3, 4, 5, 6, 7, 8];
     // ページ数でボタン表示
-    let maxpagenumber = Math.floor(totalPokemonCount.value / 100 + 1);
-    if (totalPokemonCount.value % 100 === 0) {
-      maxpagenumber -= 1;
-    }
-    for (let i = 1; i <= maxpagenumber; i++) {
-      pageArray.value.push(i);
-    }
+    // let maxpagenumber = Math.floor(totalPokemonCount.value / 100 + 1);
+    // if (totalPokemonCount.value % 100 === 0) {
+    //   maxpagenumber -= 1;
+    // }
+    // for (let i = 1; i <= maxpagenumber; i++) {
+    //   pageArray.value.push(i);
+    // }
 
-    // ページング処理
+    // ページング処理（世代別）
     let onPageButtunClick = (page: number) => {
       pokemonList.value = store.getters.getPokemons;
-      const slicePokemon = pokemonList.value.slice(
-        page * 100 - 100,
-        page * 100
-      );
-      pokemonList.value = slicePokemon;
+      if (page === 1) {
+        const slicePokemon = pokemonList.value.slice(0, 151);
+        pokemonList.value = slicePokemon;
+      }
+      if (page === 2) {
+        const slicePokemon = pokemonList.value.slice(151, 251);
+        pokemonList.value = slicePokemon;
+      }
+      if (page === 3) {
+        const slicePokemon = pokemonList.value.slice(251, 386);
+        pokemonList.value = slicePokemon;
+      }
+      if (page === 4) {
+        const slicePokemon = pokemonList.value.slice(386, 493);
+        pokemonList.value = slicePokemon;
+      }
+      if (page === 5) {
+        const slicePokemon = pokemonList.value.slice(493, 649);
+        pokemonList.value = slicePokemon;
+      }
+      if (page === 6) {
+        const slicePokemon = pokemonList.value.slice(649, 721);
+        pokemonList.value = slicePokemon;
+      }
+      if (page === 7) {
+        const slicePokemon = pokemonList.value.slice(721, 809);
+        pokemonList.value = slicePokemon;
+      }
+      if (page === 8) {
+        const slicePokemon = pokemonList.value.slice(809, 898);
+        pokemonList.value = slicePokemon;
+      }
     };
     // 2秒後に最初の100件のポケモンを表示する(読み込みに時間がかかるため)
     let firstpokemon = () => {
-      const firstPokemon = pokemonList.value.slice(0, 100);
+      const firstPokemon = pokemonList.value.slice(0, 151);
       pokemonList.value = firstPokemon;
     };
     let settime = () => {
-      setTimeout(firstpokemon, 1500);
+      setTimeout(firstpokemon, 2000);
     };
     settime();
 
@@ -167,11 +195,17 @@ export default defineComponent({
 <style scoped>
 td,
 th {
-  font-family: monospace;
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  font-weight: 900;
   font-size: 20px;
   border: ridge;
   width: 100px;
   text-align: center;
+}
+.number {
+  text-align: left;
+  font-size: 20px;
+  float: left;
 }
 .pokemon {
   float: left;
@@ -194,7 +228,6 @@ th {
 table {
   margin-left: 50px;
   margin-right: auto;
-
   background-image: url(../../public/1867768.jpg);
 }
 .btn-top-radius {
@@ -216,6 +249,8 @@ table {
   color: #fff;
 }
 .btn-gradient-3d-simple {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  font-weight: 900;
   display: inline-block;
   padding: 0.5em 1em;
   text-decoration: none;

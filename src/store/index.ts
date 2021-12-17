@@ -66,11 +66,10 @@ export default createStore({
         context.commit("showPokemonList", {
           info: payload,
           name: name,
-          type:typeArray
+          type: typeArray,
         });
       }
     },
-    
   },
   getters: {
     getPokemons(state) {

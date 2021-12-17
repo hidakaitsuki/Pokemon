@@ -46,6 +46,15 @@ export default defineComponent({
 .container {
   font-family: "M PLUS Rounded 1c", sans-serif;
   padding-top: 100px;
+  background-image: url(../../public/FAOSXgkVgAQoyQH.jpeg);
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-color: rgba(255, 255, 255, 0.89);
+  background-blend-mode: lighten;
+  background-position: center;
+  background-position: 50% -13pt;
+  background-attachment: fixed;
+  text-align: center;
 }
 th,
 tr,

@@ -1,7 +1,7 @@
 <template>
   <Header></Header>
   <div class="headerheight"></div>
-  <router-view></router-view><br>
+  <router-view></router-view>
   <Footer></Footer>
 </template>
 <script>
@@ -16,9 +16,11 @@ export default defineComponent({
 });
 </script>
 <style>
+@import url("https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c");
 .headerheight {
-  height: 100px;
+  height: 95px;
 }
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

@@ -126,11 +126,11 @@
     ><br />
     <span class="error"> {{ quantityError }}</span
     ><br />
-
     <button type="button" @click="onClickAddCart()" class="btn-gradient-radius">
       カートに追加する
     </button>
   </div>
+  
 </template>
 
 <script>
@@ -316,17 +316,17 @@ export default defineComponent({
   background-image: url(../../public/FAOSXgkVgAQoyQH.jpeg);
   background-size: 80%;
   background-repeat: no-repeat;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.89);
   background-blend-mode: lighten;
   background-position: center;
-  background-position: 50% -10pt;
+  background-position: 50% -15pt;
   background-attachment: fixed;
   text-align: center;
 }
 img {
   height: 300px;
   /* 画像と名前を近づける */
-  margin-bottom: -50px;
+  margin-bottom: -20px;
 }
 .status {
   width: 800px;
@@ -363,7 +363,7 @@ img {
 }
 .btn-gradient-radius {
   font-family: "M PLUS Rounded 1c", sans-serif;
-  width:300px;
+  width: 300px;
   height: 50px;
   font-size: 30px;
   display: inline-block;

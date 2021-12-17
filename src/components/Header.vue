@@ -2,8 +2,9 @@
   <header>
     <div class="container">
       <div class="header">
+        <div class="header-left">
         <img src="/67872373.png" class="logo" />
-        <div class="header-left"></div>
+        </div>
         <div class="header-right">
           <router-link to="/">TOP</router-link>
           <router-link to="/registerUser">会員登録</router-link>
@@ -29,6 +30,8 @@ export default defineComponent({});
 
 <style scoped>
 header {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  font-weight: 900;
   height: 100px;
   width: 100%;
   background-color: rgba(255, 255, 255);
@@ -41,6 +44,7 @@ header {
   display: flex; /* ヘッダロゴと右側のリンクを横並びにする */
   justify-content: space-between;
   align-items: center;
+  font-size: 100px;
 }
 header {
   width: 100%;
@@ -49,7 +53,6 @@ header {
 .logo {
   width: 165px;
   margin-top: 0;
-  padding-left: 0%;
 }
 
 .header-right {
@@ -60,7 +63,7 @@ header {
   line-height: 100px; /* 行の高さを指定(文字が上下の真ん中に配置される) */
   padding: 0 25px;
   color: gray;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   display: block; /* a要素をブロック要素に変更(borderまでがクリックできるようになる) */
   transition: all 0.5s; /* アニメーションの設定 all=変化の対象 0.5s=変化にかかる時間 hoverと組み合わせることが多い */
 }
