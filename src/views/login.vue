@@ -8,6 +8,7 @@
 
 <script lang="ts">
 import router from "@/router";
+import store from "@/store";
 import { defineComponent, ref } from "@vue/runtime-core";
 import axios from "axios";
 
@@ -22,6 +23,7 @@ export default defineComponent({
       });
       console.log(response.data);
       if (response.data.status === "success") {
+        store.commit("login");
         router.push("/");
       }
     };
@@ -30,6 +32,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

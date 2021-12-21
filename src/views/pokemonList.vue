@@ -75,7 +75,6 @@ export default defineComponent({
     let pokemonList = ref(new Array<Pokemon>());
     let totalPokemonCount = ref(0);
     let pageArray = ref(new Array<number>());
-
     let searchName = ref("");
     const store = useStore();
     // 初期のポケモン情報取得
@@ -86,7 +85,11 @@ export default defineComponent({
       pokemonList.value.sort(function (a, b) {
         return a.id > b.id ? -1 : 1;
       });
- 
+      const response = await axios.post(
+        "https://api-rks-generator.herokuapp.com/samples",
+        {test:"test"}
+      );
+      console.log(response.data);
     };
     // let sortPokemon = () => {
     //   pokemonList.value = pokemonList.value.sort(function (a, b) {

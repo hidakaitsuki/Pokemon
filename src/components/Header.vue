@@ -3,7 +3,7 @@
     <div class="container">
       <div class="header">
         <div class="header-left">
-        <img src="/67872373.png" class="logo" />
+          <img src="/67872373.png" class="logo" />
         </div>
         <div class="header-right">
           <router-link to="/">TOP</router-link>
@@ -11,10 +11,10 @@
           <router-link to="/cartList">
             <i class="fas fa-shopping-cart"> </i>カート
           </router-link>
-          <router-link to="/login">
+          <router-link to="/login" v-if="!isLogin">
             <i class="fas fa-sign-in-alt"></i>ログイン
           </router-link>
-          <router-link to="/logout">
+          <router-link to="/logout" v-if="isLogin">
             <i class="fas fa-sign-in-alt"></i>ログアウト
           </router-link>
         </div>
@@ -24,13 +24,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
-export default defineComponent({});
+import store from "@/store";
+import { computed, defineComponent } from "@vue/runtime-core";
+export default defineComponent({
+  props: {},
+  setup() {
+    const isLogin = computed(() => {
+      return store.getters.getIsLogin;
+    });
+
+    return {
+      isLogin,
+    };
+  },
+});
 </script>
 
 <style scoped>
+
+
 header {
   font-family: "M PLUS Rounded 1c", sans-serif;
+
   font-weight: 900;
   height: 100px;
   width: 100%;
@@ -92,5 +107,4 @@ header {
   font-size: 25px;
   padding: 21px 0;
 }
-
 </style>

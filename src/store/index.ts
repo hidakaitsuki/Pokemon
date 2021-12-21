@@ -9,8 +9,15 @@ export default createStore({
     pokemons: new Array<Pokemon>(),
     currentPokemonId: 0,
     cartPokemons: new Array<OrderPokemon>(),
+    isLogin: false,
   },
   mutations: {
+    login(state) {
+      state.isLogin = true;
+    },
+    logout(state) {
+      state.isLogin = false;
+    },
     async showPokemonList(state, payload) {
       state.totalPokemons = payload.id;
       state.pokemons.push(
@@ -72,6 +79,9 @@ export default createStore({
     },
   },
   getters: {
+    getIsLogin(state) {
+      return state.isLogin;
+    },
     getPokemons(state) {
       return state.pokemons;
     },

@@ -26,6 +26,10 @@ const routes: Array<RouteRecordRaw> = [
     path: "/registerUser",
     component: () => import("../views/registerUser.vue"),
   },
+  {
+    path: "/logout",
+    component: () => import("../views/logout.vue"),
+  },
 ];
 
 const router = createRouter({

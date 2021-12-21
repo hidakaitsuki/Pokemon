@@ -224,10 +224,10 @@ export default defineComponent({
       // 自作APIからアイテムの名前と効果をとってくる
       let getItems = async () => {
         const response = await axios.get(
-          "https://create-api-rks.herokuapp.com/samples/pokemon"
+          "https://api-rks.herokuapp.com/pokemonitem"
         );
-
-        for (let item of response.data.items) {
+console.log(response.data);
+        for (let item of response.data.item) {
           items.value.push(new Item(item.name, item.effect));
         }
       };
