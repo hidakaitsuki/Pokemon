@@ -1,17 +1,28 @@
 <template>
   <Header></Header>
-  <router-view />
+  <div class="headerheight"></div>
+  <router-view></router-view>
+  <Footer></Footer>
 </template>
 <script>
 import { defineComponent } from "@vue/runtime-core";
-import Header from "../src/components/Header.vue"
+import Header from "../src/components/Header.vue";
+import Footer from "../src/components/Footer.vue";
+
 export default defineComponent({
-  components:{
-    Header
-  }
-})
+  components: {
+    Header,
+    Footer,
+  },
+  
+});
 </script>
 <style>
+@import url("https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c");
+.headerheight {
+  height: 95px;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -19,7 +30,6 @@ export default defineComponent({
   text-align: center;
   color: #2c3e50;
 }
-
 #nav {
   padding: 30px;
 }

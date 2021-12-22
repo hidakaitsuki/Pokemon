@@ -1,9 +1,10 @@
-export class Pokemon {
+export class OrderPokemon {
   constructor(
     private _id: number,
     private _name: string,
     private _img: string,
-    private _type: Array<string>
+    private _item: Array<string>,
+    private _quantity: number
   ) {}
 
   public get id(): number {
@@ -30,11 +31,19 @@ export class Pokemon {
     this._img = img;
   }
 
-  public get type(): Array<string> {
-    return this._type;
+  public get item(): Array<string> {
+    return this._item;
   }
 
-  public set type(type: Array<string>) {
-    this._type = type;
+  public set item(item: Array<string>) {
+    this._item = item;
+  }
+
+  public get quantity(): number {
+    return this._quantity;
+  }
+
+  public set quantity(quantity: number) {
+    this._quantity = quantity;
   }
 }
