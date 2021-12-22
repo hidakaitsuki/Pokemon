@@ -5,6 +5,7 @@
         <div class="header-left">
           <img src="/67872373.png" class="logo" />
         </div>
+        <div class="title">ポケモン図鑑</div>
         <div class="header-right">
           <router-link to="/">TOP</router-link>
           <router-link to="/registerUser">会員登録</router-link>
@@ -41,11 +42,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
-
 header {
   font-family: "M PLUS Rounded 1c", sans-serif;
-
   font-weight: 900;
   height: 100px;
   width: 100%;
@@ -67,11 +65,21 @@ header {
 }
 .logo {
   width: 165px;
-  margin-top: 0;
+  position: absolute;
+  left: 0px;
+  top: 0px;
 }
-
+.title{
+  color: aliceblue;
+  position: absolute;
+  top: -10px;
+  font-size:80px;
+}
 .header-right {
   display: flex; /* ヘッダ右側のリンクを横に並べる */
+  position: absolute;
+  right: 0px;
+  top: 0px;
 }
 
 .header-right a {
