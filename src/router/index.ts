@@ -14,10 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/:NotFound(.*)",
     component: () => import("../views/page404.vue"),
   },
-  {
-    path: "/cartList",
-    component: () => import("../views/cartList.vue"),
-  },
+
   {
     path: "/login",
     component: () => import("../views/login.vue"),

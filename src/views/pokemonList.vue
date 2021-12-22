@@ -168,7 +168,7 @@ export default defineComponent({
       pokemonList.value = firstPokemon;
     };
     let settime = () => {
-      setTimeout(firstpokemon, 2000);
+      setTimeout(firstpokemon, 5000);
     };
     settime();
 
